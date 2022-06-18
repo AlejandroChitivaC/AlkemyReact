@@ -1,6 +1,8 @@
 import axios from "axios";
 import swal from "@sweetalert/with-react";
+import { useHistory } from "react-router-dom";
 function Login() {
+  const history = useHistory();
   const sbmtHandler = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
@@ -48,6 +50,9 @@ function Login() {
       .post("http://challenge-react.alkemy.org", { email, password })
       .then((res) => {
         console.log(res.data);
+        const tokenApi = res.data.token;
+        localStorage.setItem("token", tokenApi);
+        history.push('/listado');
       });
   };
   return (
