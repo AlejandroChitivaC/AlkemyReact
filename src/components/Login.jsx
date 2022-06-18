@@ -1,4 +1,5 @@
 import axios from "axios";
+import swal from "@sweetalert/with-react";
 function Login() {
   const sbmtHandler = (e) => {
     e.preventDefault();
@@ -8,46 +9,65 @@ function Login() {
       /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     console.log(regexEmail.test(email));
     if (email === "" || password === "") {
-      alert("Los campos no pueden estar vacíos");
+      swal({
+        title: "Oops...",
+        text: "Rellena todos los campos",
+        icon: "error",
+        button: "Ok",
+      });
+
       return;
     }
-    if (email != "" && !regexEmail.test(email)) {
-      alert(
-        "El email no parece ser una dirección de correo electrónico válida"
-      );
+    if (email !== "" && !regexEmail.test(email)) {
+      swal({
+        title: "Oops...",
+        text: "Email no valido",
+        icon: "error",
+        button: "Ok",
+      });
       return;
     }
-    if (email != "challenge@alkemy.org" || password != "react") {
-      alert("El email o la contraseña no son correctos");
+    if (email !== "challenge@alkemy.org" || password !== "react") {
+      swal({
+        title: "Oops...",
+        text: "Email o contraseña incorrectos",
+        icon: "error",
+        button: "Ok",
+      });
       return;
+    } else {
+      swal({
+        title: "Bienvenido",
+        text: "Has iniciado sesión correctamente",
+        icon: "success",
+        button: "Ok",
+      });
     }
     console.log("Información lista para enviar");
     axios
-      .post("http://challenge.alkemy.org", { email, password })
+      .post("http://challenge-react.alkemy.org", { email, password })
       .then((res) => {
         console.log(res.data);
       });
-
-    return (
-      <>
-        <form onSubmit={sbmtHandler}>
-          <label>
-            <span>Email:</span>
-            <br />
-            <input type="text" name="email" />
-          </label>
-          <br />
-          <label>
-            <span>Password:</span>
-            <br />
-            <input type="password" name="password" />
-          </label>
-          <br />
-          <button type="submit">Ingresar</button>
-        </form>
-      </>
-    );
   };
+  return (
+    <>
+      <form onSubmit={sbmtHandler}>
+        <label>
+          <span>Email:</span>
+          <br />
+          <input type="text" name="email" />
+        </label>
+        <br />
+        <label>
+          <span>Password:</span>
+          <br />
+          <input type="password" name="password" />
+        </label>
+        <br />
+        <button type="submit">Ingresar</button>
+      </form>
+    </>
+  );
 }
-  export default Login;
-
+export default Login;
